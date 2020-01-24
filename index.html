@@ -1,0 +1,37 @@
+<DOCTYPE html>
+<html><meta charset="utf-8"><body>
+<h1>メールのスパム判定ができます</h1>
+<h2>文章を入力して判定ボタンを押してください</h2>
+<div>
+  <textarea id="q" rows="20" cols="80" style="font-size:150%"></textarea>
+  <br><button id="qButton" style="width:120px; height:50px">判定する</button>
+  <div id="result"></div>
+</div>
+<script>
+const qs = (q) => document.querySelector(q)
+window.onload = () => {
+  const q = qs('#q')
+  const qButton = qs('#qButton')
+  const result = qs('#result')
+
+  qButton.onclick = () => {
+    result.innerHTML = "..."
+    const api = "/api?q=" + 
+      encodeURIComponent(q.value)
+    fetch(api).then((res) => {
+      return res.json() 
+    }).then((data) => {
+      result.innerHTML =
+        data["label"] + 
+        "<span style='font-size: 0.8em'>(正解率" + 
+        parseInt(data["per"] * 100) + "%)</span>"
+    })
+  }
+}
+</script>
+<style>
+#result { padding: 10px; font-size: 2em; color: lime; }
+#q { background-color: #fffff0; }
+</style>
+</body></html>  
+    
